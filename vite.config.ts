@@ -8,30 +8,44 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          motion: ['framer-motion'],
-          charts: ['recharts'],
-          forms: ['react-hook-form'],
-          icons: ['lucide-react']
+          'react-vendor': ['react', 'react-dom'],
+          'motion': ['framer-motion'],
+          'charts': ['recharts'],
+          'forms': ['react-hook-form'],
+          'icons': ['lucide-react']
         }
       }
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
+        passes: 2
+      },
+      mangle: {
+        safari10: true
+      },
+      format: {
+        comments: false
       }
-    }
+    },
+    cssMinify: true,
+    reportCompressedSize: false,
+    sourcemap: false
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
-    include: ['react', 'react-dom', 'framer-motion']
+    include: ['react', 'react-dom'],
+    exclude: ['lucide-react']
   },
   server: {
     hmr: {
       overlay: false
     }
+  },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
   }
 });
