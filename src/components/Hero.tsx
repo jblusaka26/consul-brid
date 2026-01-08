@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 
 interface HeroProps {
@@ -7,6 +6,12 @@ interface HeroProps {
 }
 
 const Hero: React.FC<HeroProps> = ({ language }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   const content = {
     en: {
       title: 'Bridgelink Mineral Consultants Ltd',
@@ -47,139 +52,60 @@ const Hero: React.FC<HeroProps> = ({ language }) => {
           className="w-full h-full object-cover"
           loading="eager"
           decoding="async"
+          fetchpriority="high"
           />
         </picture>
       </div>
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto text-center w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-6 sm:space-y-8"
+        <div
+          className={`space-y-6 sm:space-y-8 transition-all duration-700 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}
         >
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight px-2"
-          >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight px-2">
             {content[language].title}
-          </motion.h1>
+          </h1>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-4"
-          >
+          <div className="space-y-4">
             <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-amber-200 px-2">
               {content[language].subtitle}
             </p>
             <p className="text-base sm:text-lg md:text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed px-4">
               {content[language].description}
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
+            <button
               onClick={() => scrollToSection('#about')}
-              className="flex items-center justify-center space-x-2 bg-amber-600 hover:bg-amber-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-colors duration-200 w-full sm:w-auto min-h-[48px] touch-manipulation"
+              className="flex items-center justify-center space-x-2 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all duration-200 w-full sm:w-auto min-h-[48px] touch-manipulation"
             >
               <span>{content[language].cta1}</span>
               <ArrowRight className="w-5 h-5" />
-            </motion.button>
+            </button>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={() => scrollToSection('#contact')}
-              className="flex items-center justify-center space-x-2 border-2 border-white text-white hover:bg-white hover:text-amber-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-colors duration-200 w-full sm:w-auto min-h-[48px] touch-manipulation"
+              className="flex items-center justify-center space-x-2 border-2 border-white text-white hover:bg-white hover:text-amber-900 active:scale-95 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg transition-all duration-200 w-full sm:w-auto min-h-[48px] touch-manipulation"
             >
               <span>{content[language].cta2}</span>
-            </motion.button>
-          </motion.div>
-        </motion.div>
+            </button>
+          </div>
+        </div>
 
         {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex flex-col items-center text-white/80 cursor-pointer touch-manipulation"
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2">
+          <button
             onClick={() => scrollToSection('#about')}
+            className="flex flex-col items-center text-white/80 cursor-pointer touch-manipulation animate-bounce"
+            aria-label={content[language].scroll}
           >
             <span className="text-xs sm:text-sm mb-2 hidden sm:block">{content[language].scroll}</span>
             <ChevronDown className="w-6 h-6" />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Floating elements */}
-      <div className="absolute inset-0 z-10">
-        {/* Animated particles */}
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-            className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-amber-400/40 rounded-full hidden sm:block"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-          />
-        ))}
-        
-        <motion.div
-          animate={{ 
-            x: [0, 30, 0], 
-            y: [0, -20, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-4 sm:left-10 w-4 h-4 sm:w-6 sm:h-6 bg-amber-400/40 rounded-full shadow-lg hidden sm:block"
-        />
-        <motion.div
-          animate={{ 
-            x: [0, -25, 0], 
-            y: [0, 15, 0],
-            rotate: [0, -3, 0]
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-40 right-4 sm:right-20 w-6 h-6 sm:w-8 sm:h-8 bg-orange-400/30 rounded-full shadow-lg hidden sm:block"
-        />
-        <motion.div
-          animate={{ 
-            x: [0, 20, 0], 
-            y: [0, -30, 0],
-            rotate: [0, 8, 0]
-          }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-40 left-4 sm:left-20 w-8 h-8 sm:w-10 sm:h-10 bg-yellow-400/35 rounded-full shadow-lg hidden sm:block"
-        />
+          </button>
+        </div>
       </div>
     </section>
   );
